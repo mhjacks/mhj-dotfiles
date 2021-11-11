@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+proxy_status () {
+        env | grep -i prox
+}
+
+proxy_on () {
+        if [ -z "$1" ]; then
+                p="http://proxy.imladris.lan:3128"
+        else
+                p="$1"
+        fi
+
+        export http_proxy=$p
+        export https_proxy=$http_proxy
+        export HTTP_PROXY=$http_proxy
+        export HTTPS_PROXY=$http_proxy
+        export FTP_PROXY=$http_proxy
+
+        proxy_status
+}
+
+proxy_off () {
+        unset http_proxy
+        unset https_proxy
+        unset HTTP_PROXY
+        unset HTTPS_PROXY
+        unset FTP_PROXY
+}
+
+

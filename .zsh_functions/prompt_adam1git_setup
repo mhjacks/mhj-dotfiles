@@ -1,0 +1,70 @@
+# agam1git prompt theme
+prompt_adam1git_help () {
+  cat <<'EOF'
+This prompt is color-scheme-able.  You can invoke it thus:
+
+  prompt adam1git [<userhost_bg> [<userhost_fg> [<dirpath> [<gitinfo> [<promptchar> [<maxdirlevel> [<showdirlevel>]]]]]]]
+
+This is heavily based on adam1 which is distributed with ZSH. 
+Colors are changed from the default adam1 colors and the prompt will display
+the branch of your git repository (if you are in one).
+EOF
+}
+
+prompt_adam1git_setup () {
+  prompt_adam1git_userhost_bg=${1:-'none'}
+  prompt_adam1git_userhost_fg=${2:-'green'}
+  prompt_adam1git_dirpath=${3:-'cyan'}
+  prompt_adam1git_gitinfo=${4:-'yellow'}
+  prompt_adam1git_promptchar=${5:-'white'}
+  prompt_adam1git_maxdirlevel=${6:-'7'}
+  prompt_adam1git_showdirlevel=${7:-'3'}
+
+  # For debian-style systems
+  if [[ -f /usr/lib/git-core/git-sh-prompt ]]; then
+    . /usr/lib/git-core/git-sh-prompt
+  fi
+
+  # RH-style systems need this.
+  if [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]]; then
+    . /usr/share/git-core/contrib/completion/git-prompt.sh
+  fi
+
+  # MacOS needs this (git from ports)
+  if [[ -f /usr/local/git/contrib/completion/git-prompt.sh ]]; then
+    . /usr/local/git/contrib/completion/git-prompt.sh
+  fi
+
+  base_prompt="%{$bg_no_bold[$prompt_adam1git_userhost_bg]%}%{$fg_bold[$prompt_adam1git_userhost_fg]%}%n@%m%{$reset_color%}:"
+  post_prompt="%{$reset_color%}"
+
+  setopt localoptions extendedglob
+
+  add-zsh-hook precmd prompt_adam1git_precmd
+}
+
+zsh_git_string () {
+  local git_string="$( __git_ps1 '%s' )"
+
+  if [[ $git_string != '' ]]; then
+    local git_sha=$( git rev-parse --short HEAD 2>/dev/null )
+    printf "\n%s %s" $git_sha $git_string
+  fi
+}
+
+prompt_adam1git_precmd () {
+  setopt noxtrace localoptions
+  local base_prompt_expanded_no_color base_prompt_etc
+  local prompt_length space_left
+  local git_string
+
+  git_string=$( zsh_git_string )
+
+  path_prompt="%{$fg_bold[$prompt_adam1git_dirpath]%}%~%{$fg_bold[$prompt_adam1git_gitinfo]%}$git_string$prompt_newline%{$fg_bold[$prompt_adam1git_promptchar]%}"
+  
+  PS1="$base_prompt$path_prompt%# $post_prompt"
+  PS2="$base_prompt$path_prompt%_> $post_prompt"
+  PS3="$base_prompt$path_prompt?# $post_prompt"
+}
+
+prompt_adam1git_setup "$@"
