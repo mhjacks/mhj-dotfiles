@@ -1,0 +1,49 @@
+[alias]
+  fancylog = log --color --graph --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  svnlog = log --color --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --name-status
+  svndatelog = log --color --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cd)%C(bold blue) %an <%ae>%Creset' --abbrev-commit --name-status
+  lg = log --all --graph --decorate --oneline --abbrev-commit
+  ac = !git add -A :/ && git commit
+  rso = remote show origin
+  poa = push origin --all
+  dal = describe --all --long
+  rhh = reset --hard HEAD
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  up = pull --rebase --all --prune --autostash --tags
+  headsha = rev-parse --short HEAD
+
+[push]
+  default = simple
+
+[color]
+  ui = auto
+
+[color "branch"]
+  current = yellow bold
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = red bold
+  changed = green bold
+  untracked = cyan
+
+[merge]
+  tool = vimdiff
+[pull]
+	all = true
+	rebase = true
+	autostash = true
+	prune = true
+	tags = true
+[diff]
+	colorMoved = zebra
+[init]
+	defaultBranch = main
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
