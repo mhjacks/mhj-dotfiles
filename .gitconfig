@@ -1,13 +1,10 @@
 [alias]
   fancylog = log --color --graph --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-  svnlog = log --color --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --name-status
-  svndatelog = log --color --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cd)%C(bold blue) %an <%ae>%Creset' --abbrev-commit --name-status
+  oldsvnlog = log --color --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --name-status
+  svnlog = log --color --pretty=format:'%C(bold yellow)%h%Creset -%C(bold red)%d%Creset %s %Cgreen(%cd)%C(bold blue) %an <%ae>%Creset' --abbrev-commit --name-status
   lg = log --all --graph --decorate --oneline --abbrev-commit
   ac = !git add -A :/ && git commit
-  rso = remote show origin
-  poa = push origin --all
   dal = describe --all --long
-  rhh = reset --hard HEAD
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   up = pull --rebase --all --prune --autostash --tags
   headsha = rev-parse --short HEAD
