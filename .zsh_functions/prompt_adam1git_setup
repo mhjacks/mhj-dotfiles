@@ -57,6 +57,7 @@ prompt_adam1git_precmd () {
   local base_prompt_expanded_no_color base_prompt_etc
   local prompt_length space_left
   local git_string
+  local kube
 
   git_string=$( zsh_git_string )
 

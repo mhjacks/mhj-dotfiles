@@ -1,0 +1,3 @@
+yq() {
+	podman run --rm -i -v "${PWD}":/workdir docker.io/mikefarah/yq "$@"
+}

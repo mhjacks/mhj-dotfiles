@@ -18,13 +18,19 @@ umask 022
 # Add to function path
 fpath=(~/.zsh_functions $fpath)
 
+autoload -Uz add-zsh-hook
+
 autoload -Uz pathmunge
 autoload -Uz kubeconfig_on
 autoload -Uz kubeconfig_off
 autoload -Uz kubeconfig_status
+autoload -Uz yq
 
 autoload -Uz compinit
 compinit
+
+autoload -Uz bashcompinit
+bashcompinit
 
 # Turn on colors
 autoload -Uz colors
@@ -40,9 +46,14 @@ GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
 GIT_PS1_SHOWCOLORHINTS=1
 
+autoload -Uz kubeon
+autoload -Uz kubeoff
+autoload -Uz kube_ps1
+kubeon -g
+
 autoload -Uz promptinit
 promptinit
-prompt adam1git
+prompt adam1gitkube
 
 # Enable built-in FTP client
 #autoload -Uz zfinit

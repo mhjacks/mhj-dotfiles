@@ -1,0 +1,72 @@
+# agam1git prompt theme
+prompt_adam1gitkube_help () {
+  cat <<'EOF'
+This prompt is color-scheme-able.  You can invoke it thus:
+
+  prompt adam1gitkube [<userhost_bg> [<userhost_fg> [<dirpath> [<gitinfo> [<promptchar> [<maxdirlevel> [<showdirlevel>]]]]]]]
+
+This is heavily based on adam1 which is distributed with ZSH. 
+Colors are changed from the default adam1 colors and the prompt will display
+the branch of your git repository (if you are in one).
+EOF
+}
+
+prompt_adam1gitkube_setup () {
+  prompt_adam1gitkube_userhost_bg=${1:-'none'}
+  prompt_adam1gitkube_userhost_fg=${2:-'green'}
+  prompt_adam1gitkube_dirpath=${3:-'cyan'}
+  prompt_adam1gitkube_gitinfo=${4:-'yellow'}
+  prompt_adam1gitkube_promptchar=${5:-'white'}
+  prompt_adam1gitkube_maxdirlevel=${6:-'7'}
+  prompt_adam1gitkube_showdirlevel=${7:-'3'}
+
+  # For debian-style systems
+  if [[ -f /usr/lib/git-core/git-sh-prompt ]]; then
+    . /usr/lib/git-core/git-sh-prompt
+  fi
+
+  # RH-style systems need this.
+  if [[ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]]; then
+    . /usr/share/git-core/contrib/completion/git-prompt.sh
+  fi
+
+  # MacOS needs this (git from ports)
+  if [[ -f /usr/local/git/contrib/completion/git-prompt.sh ]]; then
+    . /usr/local/git/contrib/completion/git-prompt.sh
+  fi
+
+  base_prompt="%{$bg_no_bold[$prompt_adam1gitkube_userhost_bg]%}%{$fg_bold[$prompt_adam1gitkube_userhost_fg]%}%n@%m%{$reset_color%}:"
+  post_prompt="%{$reset_color%}"
+
+  setopt localoptions extendedglob
+
+  add-zsh-hook precmd prompt_adam1gitkube_precmd
+}
+
+zsh_git_string () {
+  local git_string="$( __git_ps1 '%s' )"
+
+  if [[ $git_string != '' ]]; then
+    local git_sha=$( git rev-parse --short HEAD 2>/dev/null )
+    printf "\n%s %s" $git_sha $git_string
+  fi
+}
+
+prompt_adam1gitkube_precmd () {
+  setopt noxtrace localoptions
+  local base_prompt_expanded_no_color base_prompt_etc
+  local prompt_length space_left
+  local git_string
+  local kube_prompt
+
+  git_string="$( zsh_git_string )"
+  kube_prompt="%B$( kube_ps1 )$prompt_newline"
+
+  path_prompt="%{$fg_bold[$prompt_adam1gitkube_dirpath]%}%~%{$fg_bold[$prompt_adam1gitkube_gitinfo]%}$git_string$prompt_newline%{$fg_bold[$prompt_adam1gitkube_promptchar]%}"
+
+  PS1="$kube_prompt$base_prompt$path_prompt%# $post_prompt"
+  PS2="$kube_prompt$base_prompt$path_prompt%_> $post_prompt"
+  PS3="$kube_prompt$base_prompt$path_prompt?# $post_prompt"
+}
+
+prompt_adam1gitkube_setup "$@"
